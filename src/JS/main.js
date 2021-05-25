@@ -37,19 +37,17 @@ let personne = {
     payerArticle () {
         this.argent -= epicerie.ingredients[i].prix;
     },
+    
     couper () {
-    let j = -1;
-    for (; j < bol.contenu.length; ) {
-        j++;
-        if (bol.contenu[j].etat == "entier") {
-            bol.contenu[j].etat == "coupé";
-            console.log(`Chris a coupé ${bol.contenu[j].nom} en petit morceaux !`);
-        } else {
-            console.log(`pas besoin de couper ${bol.contenu[j].nom} !`);
+        for (let j = 0; j < bol.contenu.length; j++) { 
+            if (bol.contenu[j].etat == "entier") {
+                bol.contenu[j].etat = "coupé";
+                console.log(`Chris a coupé ${bol.contenu[j].nom} en petit morceaux !`);
+            } else {
+                console.log(`pas besoin de couper ${bol.contenu[j].nom} !`);
+            }
         }
-    }
-
-    }
+    },
 }
 
 // importation des classes
@@ -68,30 +66,45 @@ let epices = new Ingredients("épices", "moulues", 2);
 let fromage = new Ingredients("fromage", "coupé", 2);
 
 
-
 epicerie.ingredients.push(oignon, oeufs, epices, fromage);
 
 // création outil
 
 // création poêle
 
+let poele = {
+    contenu : {},
+
+    cuire() {
+        setTimeout(()=>{
+            this.contenu.etat = 'cuit', 
+            console.log("Omelette cuite")
+        }, 4 * 1000);
+    },
+
+    remplir(bol) {
+        this.contenu = bol.vider();
+    }
+}
+
 // création bol
 
 let bol = {
     contenu : [],
-    // melanger() {
-    //     for (let j = 0; i < this.contenu.length; j++) {
-    //         if (this.contenu[j].etat == "coupé" || this.contenu[j].etat == "moulu") {
-    //             let newMelange = {
-    //                 nom: "Omelette",
-    //                 etat: "non cuite"
-    //             }
-    //         } else {
-    //         }
-    //         console.log(`J'ai maintenant dans mon bol une ${newMelange.nom} mais elle est ${newMelange.etat}`);
-    //         this.contenu = newMelange;
-    //     }
-    // },
+    melanger(nomMelange) {
+       let newMelange = { 
+           nom : nomMelange, 
+           etat : 'pas cuit', 
+           ingedients : this.contenu};
+
+       this.contenu = newMelange;
+    },
+
+    vider() {
+        var contenu = this.contenu;
+        this.contenu = [];
+        return contenu;
+    }
 }
 
 // début omelette
@@ -146,21 +159,12 @@ personne.rendrePanier(epicerie);
 personne.seDeplacer(epicerie, maison);
 
 
-console.log(bol.contenu[0].etat)
-console.log(bol.contenu.length);
+// on coupe les éléments entiers
 
-// on coupe les éléments entier
+personne.couper();
 
-console.log(bol.contenu)
+bol.melanger("Omelette")
+console.log('Voici le melange du bol ', bol.contenu);
 
-let j = -1;
-for (; j < bol.contenu.length; ) {
-    j++;
-    if (bol.contenu[j].etat == "entier") {
-        bol.contenu[j].etat == "coupé";
-        console.log(`Chris a coupé ${bol.contenu[j].nom} en petit morceaux !`);
-    } else {
-        console.log(`pas besoin de couper ${bol.contenu[j].nom} !`);
-    }
-}
-
+poele.remplir(bol);
+poele.cuire();
