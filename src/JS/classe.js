@@ -1,14 +1,7 @@
 class Lieux {
-    constructor (nom, personnes) {
+    constructor (nom, personnes, ingredients) {
         this.nom = nom;
         this.personnes = personnes;
-    }
-}
-
-class Epicerie extends Lieux {
-    constructor (nom, personnes, paniers, ingredients) {
-        super (nom, personnes);
-        this.paniers = paniers;
         this.ingredients = ingredients;
     }
 }
@@ -21,4 +14,4 @@ class Ingredients {
     }
 }
 
-export {Lieux,Epicerie,Ingredients}
+export {Lieux,Ingredients}

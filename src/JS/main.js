@@ -1,49 +1,50 @@
+// création épicerie
+
+let epicerie = new Lieux("epicerie",[], []);
+
+epicerie.bacPanier = [
+    {type:'panier1', contenu: []},
+    {type:'panier2', contenu: []},
+    {type:'panier3', contenu: []}
+];
+
 // création de l'objet "personne"
 
 let personne = {
     prenom : "Chris",
     lieu : " ",
     argent : 50,
-    maindroite : {
-        contenu : [],
-        priseEnMain (objet) {
-            personne.maindroite.contenu.push(objet);
-            console.log(`Vous utilisez votre main droite`);
-        }
-    }, 
-    maingauche : {
-        contenu : [],
-        priseEnMain (objet) {
-            personne.maingauche.contenu.push(objet);
-            console.log(`Vous utilisez votre main gauche`);
+    maindroite : [], 
+    maingauche : [],
+    prendrePanier (endroit) {
+        if (endroit.nom == "epicerie") {
+            personne.maindroite.push(endroit.bacPanier.shift());
+            console.log(`${this.prenom} a pris ${this.maindroite[0].type}`);
         }
     },
-    seDeplacer (lieu) {
-        if (lieu == maison) {
-        maison.personnes.push(personne);
-        console.log(`${this.prenom} est arrivé à la ${lieu.nom}`);
-        }
-        else {
-        epicerie.personnes.push(personne);
-        console.log(`${this.prenom} est arrivé à l'${lieu.nom}`);
+    rendrePanier (endroit) {
+        if (endroit.nom == "epicerie") {
+            epicerie.bacPanier.push(personne.maindroite.shift());
+            console.log(`${this.prenom} a rendu son panier`);
         }
     },
-    payerArticle (article) {
-        this.argent -= (parseInt(article.prix));
+    seDeplacer (depart, arrivee) {
+        arrivee.personnes.push(personne);
+        depart.personnes.splice(depart.personnes.indexOf(personne), 1);
+        personne.lieu = arrivee;
+        console.log(`${personne.prenom} est bien arrivé à ${personne.lieu.nom}`);
+    },
+    payerArticle () {
+        this.argent -= epicerie.ingredients[i].prix;
     },
     couper (ingredients, outil) {
-        if (outil == "couteau") {
-        return ingredients.etat = "coupé";
-        } 
-        else {
-            console.log("ratez !");
-        }
+        
     }
 }
 
 // importation des classes
 
-import {Lieux, Epicerie, Ingredients} from "./classe.js";
+import {Lieux, Ingredients} from "./classe.js";
 
 // création de l'objet "maison"
 
@@ -52,16 +53,13 @@ let maison = new Lieux("maison", []);
 // création ingrédients
 
 let oignon = new Ingredients("oignons", "entier", 1.5);
-let oeufs = new Ingredients("oeufs", "entier", 1);
+let oeufs = new Ingredients("oeufs", "entier", 2);
 let epices = new Ingredients("épices", "moulues", 2);
 let fromage = new Ingredients("fromage", "coupé", 2);
 
-let liste = [oignon, oeufs, epices, fromage];
 
-// création épicerie
-let panier = [[],[],[]];
-let epicerie = new Epicerie("épicerie",[], panier, liste);
 
+epicerie.ingredients.push(oignon, oeufs, epices, fromage);
 
 // création outil
 
@@ -69,16 +67,39 @@ let epicerie = new Epicerie("épicerie",[], panier, liste);
 
 // création bol
 
-
+let bol = [];
 
 // début omelette
 
 
 // déplacement
-personne.seDeplacer(maison);
-personne.seDeplacer(epicerie);
+let nullePart = new Lieux('Nulle Part',[]);
+nullePart.personnes.push(personne);
+personne.lieu = nullePart;
 
-// 
-personne.maindroite.priseEnMain(epicerie.paniers);
+personne.seDeplacer(nullePart, maison);
 
-// 
+personne.seDeplacer(maison, epicerie);
+
+
+
+// perso prend le panier et achète
+
+personne.prendrePanier(epicerie);
+
+
+let i = -1;
+for (; i < epicerie.ingredients.length-1 ;) {
+    i++;
+    personne.maindroite.push(epicerie.ingredients[i]);
+    personne.payerArticle();
+    console.log(`Chris a mis ${epicerie.ingredients[i].nom} dans ${personne.maindroite[0].type}`);
+    console.log(`il reste ${personne.argent - epicerie.ingredients[i].prix} à Chris`)
+}
+
+// on rentre à la maison
+
+personne.seDeplacer(epicerie, maison);
+
+
+// on place les ingrédients dans le bol
