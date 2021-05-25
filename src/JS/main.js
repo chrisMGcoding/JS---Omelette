@@ -25,7 +25,7 @@ let personne = {
     rendrePanier (endroit) {
         if (endroit.nom == "epicerie") {
             epicerie.bacPanier.push(personne.maindroite.shift());
-            console.log(`${this.prenom} a rendu son panier`);
+            console.log(`${this.prenom} a rendu son panier à l'épicerie`);
         }
     },
     seDeplacer (depart, arrivee) {
@@ -37,8 +37,18 @@ let personne = {
     payerArticle () {
         this.argent -= epicerie.ingredients[i].prix;
     },
-    couper (ingredients, outil) {
-        
+    couper () {
+    let j = -1;
+    for (; j < bol.contenu.length; ) {
+        j++;
+        if (bol.contenu[j].etat == "entier") {
+            bol.contenu[j].etat == "coupé";
+            console.log(`Chris a coupé ${bol.contenu[j].nom} en petit morceaux !`);
+        } else {
+            console.log(`pas besoin de couper ${bol.contenu[j].nom} !`);
+        }
+    }
+
     }
 }
 
@@ -67,7 +77,22 @@ epicerie.ingredients.push(oignon, oeufs, epices, fromage);
 
 // création bol
 
-let bol = [];
+let bol = {
+    contenu : [],
+    // melanger() {
+    //     for (let j = 0; i < this.contenu.length; j++) {
+    //         if (this.contenu[j].etat == "coupé" || this.contenu[j].etat == "moulu") {
+    //             let newMelange = {
+    //                 nom: "Omelette",
+    //                 etat: "non cuite"
+    //             }
+    //         } else {
+    //         }
+    //         console.log(`J'ai maintenant dans mon bol une ${newMelange.nom} mais elle est ${newMelange.etat}`);
+    //         this.contenu = newMelange;
+    //     }
+    // },
+}
 
 // début omelette
 
@@ -103,3 +128,39 @@ personne.seDeplacer(epicerie, maison);
 
 
 // on place les ingrédients dans le bol
+
+let n = 0;
+for (; n < personne.maindroite.length-1;) {
+    n++;
+    bol.contenu.push(personne.maindroite[n]);
+    console.log(`Chris ajoute ${personne.maindroite[n].nom} dans le bol`);
+}
+
+
+// on va à l'épicerie déposer son panier et on retourne à la maison
+
+personne.seDeplacer(maison, epicerie);
+
+personne.rendrePanier(epicerie);
+
+personne.seDeplacer(epicerie, maison);
+
+
+console.log(bol.contenu[0].etat)
+console.log(bol.contenu.length);
+
+// on coupe les éléments entier
+
+console.log(bol.contenu)
+
+let j = -1;
+for (; j < bol.contenu.length; ) {
+    j++;
+    if (bol.contenu[j].etat == "entier") {
+        bol.contenu[j].etat == "coupé";
+        console.log(`Chris a coupé ${bol.contenu[j].nom} en petit morceaux !`);
+    } else {
+        console.log(`pas besoin de couper ${bol.contenu[j].nom} !`);
+    }
+}
+
